@@ -1,7 +1,9 @@
 import 'dart:developer';
+import 'dart:math';
 
 import 'package:dio/dio.dart';
-import 'file:///C:/Users/Administrator/Desktop/flutter_app/lib/model/BaseBean.dart';
+import 'model/api.dart';
+import 'model/entity/base_bean.dart';
 
 class HttpUtil {
   static Dio dio;
@@ -17,13 +19,13 @@ class HttpUtil {
 
   HttpUtil() {
     dio = Dio(BaseOptions(
-        baseUrl: "https://www.mxnzp.com/api",
+        baseUrl: Api.host,
         connectTimeout: 10000,
         receiveTimeout: 10000,
-        responseType: ResponseType.json));
+        responseType: ResponseType.plain));
   }
 
-  void doGet<T>(String path, {Map params, Function(T data) data, Function(int code) code}) async {
+  void doGet<T>(String path, {Map<String, dynamic> params, Function(T data) data, Function(int code) code}) async {
     Response resp = await dio.request(path,
         queryParameters: params,
         options: Options(method: "get", headers: {
@@ -31,9 +33,10 @@ class HttpUtil {
           "app_secret": "NkpSNy8vN1NKejJuWUZmeWR4VEJFZz09"
         }));
     if (handleStateCode(resp.statusCode)) {
-      var baseBean = BaseBean.fromJson(resp.data.toString());
 
-      log("baseBean:"+baseBean.toString());
+      print(resp.data.toString());
+
+      var baseBean = BaseBean<T>.fromJson(resp.data.toString());
 
       if (baseBean.code == 1) {
         data?.call(baseBean.data);
