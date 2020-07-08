@@ -5,7 +5,7 @@ newsListEntityFromJson(NewsListEntity data, Map<String, dynamic> json) {
 		data.title = json['title']?.toString();
 	}
 	if (json['imgList'] != null) {
-		data.imgList = json['imgList'];
+		data.imgList = json['imgList']?.map((v) => v?.toString())?.toList()?.cast<String>();
 	}
 	if (json['source'] != null) {
 		data.source = json['source']?.toString();
@@ -14,7 +14,7 @@ newsListEntityFromJson(NewsListEntity data, Map<String, dynamic> json) {
 		data.newsId = json['newsId']?.toString();
 	}
 	if (json['digest'] != null) {
-		data.digest = json['digest']?.toString();
+		data.digest = json['digest'];
 	}
 	if (json['postTime'] != null) {
 		data.postTime = json['postTime']?.toString();

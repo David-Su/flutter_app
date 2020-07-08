@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_app/http_util.dart';
 import 'package:flutter_app/model/api.dart';
 import 'package:flutter_app/model/entity/news_list_entity.dart';
+import 'package:flutter_app/news_page.dart';
 import 'package:intl/intl.dart';
 
 import 'model/entity/news_type_entity.dart'; // 需要在 pubspec.yaml 增加该模块
@@ -16,51 +17,40 @@ class MainPage extends StatefulWidget {
 
 class _MainPageWidget extends State<MainPage>
     with SingleTickerProviderStateMixin {
-  TabController tabController;
+  TabController _tabController;
+  PageController _pageController;
+  static String text = "demo";
+  List<Widget> pages = [NewsPage(), Text(text), Text(text), Text(text)];
 
-  String text = "demo";
 
   @override
   void initState() {
     super.initState();
-    tabController = TabController(length: 4, vsync: this);
-    HttpUtil.getInstance().doGet<List<NewsTypeEntity>>(Api.newsTypes,
-        data: (data) {
-
-          log(data.runtimeType.toString());
-
-      HttpUtil.getInstance().doGet<List<NewsListEntity>>(Api.newsList,
-          params: {"typeId": data[0].typeId,"page": 1}, data: (List<NewsListEntity> data) {
-            log(data[0].title);
-          });
-
-    });
-
-
+    _tabController = TabController(length: 4, vsync: this);
+    _pageController = PageController();
   }
 
   @override
   Widget build(BuildContext context) => Scaffold(
-        appBar: AppBar(
-          title: Text("当前时间"),
-        ),
-        body: TabBarView(
-            controller: tabController,
-            children: <Widget>[Text(text), Text(text), Text(text), Text(text)]),
-        bottomNavigationBar: Material(
-          child: TabBar(
-              controller: tabController,
-              labelColor: Colors.blueAccent,
-              unselectedLabelColor: Colors.black54,
-              tabs: <Tab>[
-                Tab(text: "新闻", icon: Icon(Icons.home)),
-                Tab(text: "新闻", icon: Icon(Icons.home)),
-                Tab(text: "新闻", icon: Icon(Icons.home)),
-                Tab(text: "新闻", icon: Icon(Icons.home))
-              ]),
-        ),
-      );
-
-  String getCurrTime() =>
-      DateFormat("yyyy-MM-dd hh:mm:ss").format(DateTime.now());
+      appBar: AppBar(
+        title: Text("当前时间"),
+      ),
+      bottomNavigationBar: Material(
+        child: TabBar(
+            controller: _tabController,
+            labelColor: Colors.blueAccent,
+            unselectedLabelColor: Colors.black54,
+            onTap: (value) => _pageController.jumpToPage(value),
+            tabs: <Tab>[
+              Tab(text: "新闻", icon: Icon(Icons.home)),
+              Tab(text: "新闻", icon: Icon(Icons.home)),
+              Tab(text: "新闻", icon: Icon(Icons.home)),
+              Tab(text: "新闻", icon: Icon(Icons.home))
+            ]),
+      ),
+      body: PageView.builder(
+        itemBuilder: (context, index) => pages[index],
+        controller: _pageController,
+        physics: NeverScrollableScrollPhysics(),
+      ));
 }
