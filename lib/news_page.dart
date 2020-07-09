@@ -1,6 +1,7 @@
 import 'dart:developer';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_app/news_list_page.dart';
 import 'http_util.dart';
 import 'model/api.dart';
 import 'model/entity/news_list_entity.dart';
@@ -12,9 +13,8 @@ class NewsPage extends StatefulWidget {
 }
 
 class _NewsPageState extends State with AutomaticKeepAliveClientMixin {
-  PageController _pageController;
+  PageController _pageController = PageController();
   List<NewsTypeEntity> _types = List<NewsTypeEntity>();
-  Map<int, List<NewsListEntity>> _typeNews = Map();
 
   @override
   bool get wantKeepAlive => true;
@@ -22,9 +22,6 @@ class _NewsPageState extends State with AutomaticKeepAliveClientMixin {
   @override
   void initState() {
     super.initState();
-
-    _pageController = PageController();
-
     HttpUtil.getInstance().doGet<List<NewsTypeEntity>>(Api.newsTypes,
         data: (types) {
       setState(() {
@@ -56,48 +53,11 @@ class _NewsPageState extends State with AutomaticKeepAliveClientMixin {
             ),
             body: PageView.builder(
                 itemBuilder: (context, index) {
-                  final typeId = _types[index].typeId;
-                  final news = _typeNews[typeId];
-
-                  return ListView.builder(
-                    itemBuilder: (context, index) {
-                      var newsItem = news != null && index < news.length
-                          ? news[index]
-                          : null;
-                      return newsItem == null
-                          ? null
-                          : Row(
-                              children: <Widget>[
-                                Expanded(
-                                    child: 
-                                    newsItem.imgList.length != 0
-                                        ? Image.network(newsItem.imgList[0])
-                                        :Center()
-                                ),
-                                Expanded(child: Text(newsItem.title))
-                              ],
-                            );
-                    },
-                    itemCount: news != null ? news.length : 0,
-                  );
+                  return NewsListPage(_types[index].typeId);
                 },
-                onPageChanged: onPageChanged,
                 controller: _pageController,
                 itemCount: _types.length,
                 physics: NeverScrollableScrollPhysics())));
-  }
-
-  onPageChanged(value) {
-    final typeId = _types[value].typeId;
-    HttpUtil.getInstance().doGet<List<NewsListEntity>>(Api.newsList,
-        params: {"typeId": typeId, "page": 1},
-        data: (List<NewsListEntity> data) {
-      log(data.toString());
-
-      setState(() {
-        _typeNews[typeId] = data;
-      });
-    });
   }
 
   onTap(value) {

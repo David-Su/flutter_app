@@ -19,9 +19,7 @@ class _MainPageWidget extends State<MainPage>
     with SingleTickerProviderStateMixin {
   TabController _tabController;
   PageController _pageController;
-  static String text = "demo";
-  List<Widget> pages = [NewsPage(), Text(text), Text(text), Text(text)];
-
+  List<Widget> pages = [NewsPage(), Text("text"), Text("text"), Text("text")];
 
   @override
   void initState() {
