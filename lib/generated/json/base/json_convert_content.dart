@@ -9,6 +9,8 @@ import 'package:flutter_app/model/entity/news_detail_entity.dart';
 import 'package:flutter_app/generated/json/news_detail_entity_helper.dart';
 import 'package:flutter_app/model/entity/news_type_entity.dart';
 import 'package:flutter_app/generated/json/news_type_entity_helper.dart';
+import 'package:flutter_app/model/entity/weather_entity.dart';
+import 'package:flutter_app/generated/json/weather_entity_helper.dart';
 
 class JsonConvert<T> {
 	T fromJson(Map<String, dynamic> json) {
@@ -24,7 +26,9 @@ class JsonConvert<T> {
 			return newsListEntityFromJson(data as NewsListEntity, json) as T;			case NewsDetailEntity:
 			return newsDetailEntityFromJson(data as NewsDetailEntity, json) as T;			case NewsDetailImage:
 			return newsDetailImageFromJson(data as NewsDetailImage, json) as T;			case NewsTypeEntity:
-			return newsTypeEntityFromJson(data as NewsTypeEntity, json) as T;    }
+			return newsTypeEntityFromJson(data as NewsTypeEntity, json) as T;			case WeatherEntity:
+			return weatherEntityFromJson(data as WeatherEntity, json) as T;			case WeatherForecast:
+			return weatherForecastFromJson(data as WeatherForecast, json) as T;    }
     return data as T;
   }
 
@@ -33,7 +37,9 @@ class JsonConvert<T> {
 			return newsListEntityToJson(data as NewsListEntity);			case NewsDetailEntity:
 			return newsDetailEntityToJson(data as NewsDetailEntity);			case NewsDetailImage:
 			return newsDetailImageToJson(data as NewsDetailImage);			case NewsTypeEntity:
-			return newsTypeEntityToJson(data as NewsTypeEntity);    }
+			return newsTypeEntityToJson(data as NewsTypeEntity);			case WeatherEntity:
+			return weatherEntityToJson(data as WeatherEntity);			case WeatherForecast:
+			return weatherForecastToJson(data as WeatherForecast);    }
     return data as T;
   }
   //Go back to a single instance by type
@@ -42,7 +48,9 @@ class JsonConvert<T> {
 			return NewsListEntity().fromJson(json);			case 'NewsDetailEntity':
 			return NewsDetailEntity().fromJson(json);			case 'NewsDetailImage':
 			return NewsDetailImage().fromJson(json);			case 'NewsTypeEntity':
-			return NewsTypeEntity().fromJson(json);    }
+			return NewsTypeEntity().fromJson(json);			case 'WeatherEntity':
+			return WeatherEntity().fromJson(json);			case 'WeatherForecast':
+			return WeatherForecast().fromJson(json);    }
     return null;
   }
 
@@ -52,7 +60,9 @@ class JsonConvert<T> {
 			return List<NewsListEntity>();			case 'NewsDetailEntity':
 			return List<NewsDetailEntity>();			case 'NewsDetailImage':
 			return List<NewsDetailImage>();			case 'NewsTypeEntity':
-			return List<NewsTypeEntity>();    }
+			return List<NewsTypeEntity>();			case 'WeatherEntity':
+			return List<WeatherEntity>();			case 'WeatherForecast':
+			return List<WeatherForecast>();    }
     return null;
   }
 

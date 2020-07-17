@@ -6,6 +6,7 @@ import 'package:flutter_app/http_util.dart';
 import 'package:flutter_app/model/api.dart';
 import 'package:flutter_app/model/entity/news_list_entity.dart';
 import 'package:flutter_app/news_page.dart';
+import 'package:flutter_app/weather_page.dart';
 import 'package:intl/intl.dart';
 
 import 'model/entity/news_type_entity.dart'; // 需要在 pubspec.yaml 增加该模块
@@ -19,7 +20,7 @@ class _MainPageWidget extends State<MainPage>
     with SingleTickerProviderStateMixin {
   TabController _tabController;
   PageController _pageController;
-  List<Widget> pages = [NewsPage(), Text("text"), Text("text"), Text("text")];
+  List<Widget> pages = [NewsPage(), Text("text"), Text("text"), WeatherPage()];
 
   @override
   void initState() {

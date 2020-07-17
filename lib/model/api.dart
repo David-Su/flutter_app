@@ -7,4 +7,6 @@ class Api {
   static const String newsTypes = "news/types";
   static const String newsList = "news/list";
   static const String newsDetail = "news/details";
+
+  static const String weatherForecast = "weather/forecast";
 }
